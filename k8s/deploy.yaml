@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netint-vpu-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netint-vpu
+  template:
+    metadata:
+      labels:
+        app: netint-vpu
+    spec:
+      nodeName: lke379924-585548-276c716f0000
+      containers:
+        - name: vpu-container
+          image: andersnas/netint-vpu:latest
+          securityContext:
+            privileged: true
+          command: ["sleep"]
+          args: ["infinity"]
+          volumeMounts:
+            - mountPath: /dev
+              name: dev-volume
+            - mountPath: /tmp
+              name: tmp-volume
+      volumes:
+        - name: dev-volume
+          hostPath:
+            path: /dev
+        - name: tmp-volume
+          hostPath:
+            path: /tmp
